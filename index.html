@@ -292,6 +292,52 @@ function playSound(type){
   }catch(e){}
 }
 
+function handleHit(dmg, x, y) {
+    if (isDead) return;
+
+    if (selWeapon.id === 'heal') {
+        rage = Math.max(0, rage - 12); 
+        coins += 100; 
+        B.expr = 'normal';
+        B.exprT = 0.5;
+        mkHeal(B.x, B.y);
+        if (!isSpeaking) speak(rndLine('heal')); 
+    } else {
+        rage = Math.min(100, rage + (Math.abs(dmg) * 0.25)); 
+        coins += Math.abs(dmg) * 10;
+        B.expr = 'pain';
+        B.exprT = 1.0;
+        mkBlood(B.x, B.y, 5, 5);
+        if (Math.random() > 0.8 && !isSpeaking) speak(rndLine('hit'));
+    }
+
+    if (rage >= 100) {
+        triggerDeath();
+    }
+
+    updateHUD();
+}
+
+function triggerDeath() {
+    if (isDead) return;
+    isDead = true;
+    speak(rndLine('death'));
+    playSound('explode');
+    mkBodyParts(B.x, B.y);
+    document.getElementById('deathOverlay').style.display = 'flex';
+    setTimeout(() => {
+        isDead = false;
+        rage = 0;
+        B.x = baseX;
+        B.y = baseY;
+        B.vx = 0; 
+        B.vy = 0;
+        B.expr = 'normal';
+        document.getElementById('deathOverlay').style.display = 'none';
+        updateHUD();
+    }, 4000);
+}
+
 // ═══════════════════════════════════════
 //  SPEECH
 // ═══════════════════════════════════════
@@ -824,7 +870,11 @@ function drawParticles(){
     } else if(p.t==='laser'){
       ctx.shadowBlur=16;ctx.shadowColor=p.col;
       ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(p.x,p.y,p.sz,0,Math.PI*2);ctx.fill();
-    } else if(p.t==='part'){
+    } else if(p.t==='laser'){
+      ctx.shadowBlur=16;ctx.shadowColor=p.col;
+      ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(p.x,p.y,p.sz,0,Math.PI*2);ctx.fill();
+    }
+      else if(p.t==='part'){
       ctx.translate(p.x,p.y);ctx.rotate(p.rot||0);
       ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
       ctx.fillText(p.emoji,0,0);
