@@ -1008,18 +1008,16 @@ function killBuddy(){
 // ═══════════════════════════════════════
 //  HUD
 // ═══════════════════════════════════════
-function updateHUD(){
-  document.getElementById('coins').textContent='🪙 '+coins;
-  document.getElementById('rageFill').style.width=rage+'%';
-  document.getElementById('rageLbl').textContent='RAGE: '+~~rage+'%';
-  document.getElementById('rageFill').style.background=
-    rage>80?'linear-gradient(to right,#ff00ff,#ff0000)':
-    rage>50?'linear-gradient(to right,#ff4400,#ff0000)':
-            'linear-gradient(to right,#ff8800,#ff4400)';
-  document.getElementById('weaponLbl').textContent=selWeapon.emoji+' '+selWeapon.name;
-  const c=document.getElementById('comboLbl');
-  if(combo>=3){c.textContent='x'+combo+' COMBO!';c.style.fontSize=Math.min(2.5,1+combo*.04)+'rem';}
-  else c.textContent='';
+function updateHUD() {
+    document.getElementById('coins').textContent = '🪙 ' + Math.floor(coins);
+    document.getElementById('rageFill').style.width = rage + '%';
+    document.getElementById('rageLbl').textContent = 'FAT-BAR: ' + Math.floor(rage) + '%';
+    document.getElementById('weaponLbl').textContent = 'WEAPON: ' + selWeapon.emoji + ' ' + selWeapon.name;
+    if (combo > 1) {
+        document.getElementById('comboLbl').textContent = 'COMBO X' + combo;
+    } else {
+        document.getElementById('comboLbl').textContent = '';
+    }
 }
 
 // ═══════════════════════════════════════
