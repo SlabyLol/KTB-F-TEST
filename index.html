@@ -323,7 +323,12 @@ function handleHit(dmg, x, y) {
         mkBlood(B.x, B.y, 5, 5);
         if (Math.random() > 0.8 && !isSpeaking) speak(rndLine('hit'));
     }
-
+  
+function skinColor(base, dark) {
+    if (f > 0) return `rgba(255, ${~~(base * (1 - f) * 0.5)}, ${~~(dark * (1 - f) * 0.3)}, 1)`;
+    return B.bruised ? '#bb7744' : base;
+}
+  
     if (rage >= 100) {
         triggerDeath();
     }
