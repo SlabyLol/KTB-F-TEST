@@ -202,6 +202,17 @@ const WEAPONS=[
   {id:'dildo',   name:'Amrs Toy',      emoji:'🍆', cost:2500, dmg:1000, type:'laser', rapid:true},   
 ];
 
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        e.preventDefault(); 
+        if (!isDead) {
+            handleHit(selWeapon.dmg, B.x, B.y);
+            shake.i = 5; 
+            playSound(selWeapon.type);
+        }
+    }
+});
+  
 // ═══════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════
